@@ -29,7 +29,7 @@ class User(AbstractUser):
     #actual db column
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='citizen')
     phone_number = models.CharField( max_length=20, blank=True, null=True)
-    province = models.CharField( max_length=50, choices=PROVINCE_CHOICES, blank=True, null=True, help_text="Only applicable for province staff.")
+    province = models.CharField( max_length=50, choices=PROVINCE_CHOICES, blank=True, null=True, help_text="Only applicable for citizen and province staff.")
 
     #read only computed property which doesn't touch database
     @property
