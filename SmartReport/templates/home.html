@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Report - A location-tracked road condition and hazard reporting system to collaborate with municipal and governmental authorities.">
+    <title>Smart Report | Road Location Tracking & Reporting</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-color: #f8fafc; /* Clean Light Slate Gray */
+            --card-bg: #ffffff; /* Pure White */
+            --card-border: #e2e8f0; /* Soft Gray Border */
+            --text-primary: #1e293b; /* Dark Slate Gray */
+            --text-secondary: #64748b; /* Muted Slate Gray */
+            --primary-dark: #002D72; /* Nepal Royal Blue */
+            --primary-accent: #003893; /* Nepal Flag Blue */
+            --secondary-accent: #d52027; /* Nepal Flag Crimson */
+            --accent-amber: #e5a913; /* Nepal Government Gold */
+            --success-color: #10b981;
+            --gradient-primary: linear-gradient(135deg, #003893 0%, #0050b3 50%, #d52027 100%);
+            --font-heading: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+            --font-body: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        body.nepali-font {
+            font-family: 'Noto Sans Devanagari', var(--font-body);
+        }
+
+        /* Subtle background glow effects adapted for Light Mode */
+        .bg-glow-1 {
+            position: absolute;
+            top: -200px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 56, 147, 0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(213, 32, 39, 0.04) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        /* Header / Navbar */
+        header {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            z-index: 10;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 56, 147, 0.2);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-actions-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-accent);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Language Toggle Switcher */
+        .lang-toggle {
+            display: flex;
+            gap: 0.25rem;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 0.25rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-btn {
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
+        }
+
+        .lang-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .lang-btn.active {
+            background: var(--secondary-accent);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(213, 32, 39, 0.2);
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 3rem 1.5rem;
+            z-index: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 3.5rem;
+        }
+
+        .tagline {
+            display: inline-block;
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            background: rgba(229, 169, 19, 0.08);
+            border: 1px solid rgba(229, 169, 19, 0.25);
+            color: #b47c00; /* Darker amber for readability on light BG */
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3.25rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            color: var(--primary-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-desc {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Light Card Design */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 56, 147, 0.08), 0 1px 5px rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 56, 147, 0.15);
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+            outline: none;
+        }
+
+        input[type="text"]::placeholder {
+            color: #94a3b8;
+        }
+
+        input[type="text"]:focus {
+            background: #ffffff;
+            border-color: var(--secondary-accent);
+            box-shadow: 0 0 12px rgba(213, 32, 39, 0.15);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--secondary-accent) 0%, #b51a20 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 1.1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-heading);
+            letter-spacing: 0.02em;
+            box-shadow: 0 8px 20px rgba(213, 32, 39, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(213, 32, 39, 0.35);
+            filter: brightness(1.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4.5rem;
+            width: 100%;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: left;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+
+        .feature-card:hover {
+            background: var(--card-bg);
+            border-color: rgba(0, 56, 147, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 56, 147, 0.05);
+        }
+
+        .feature-badge {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 12px;
+            background: rgba(213, 32, 39, 0.06);
+            color: var(--secondary-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(213, 32, 39, 0.1);
+        }
+
+        .feature-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 2.2rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            z-index: 10;
+            background: #ffffff;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 5px rgba(229, 169, 19, 0.05);
+            }
+            100% {
+                transform: scale(1.03);
+                box-shadow: 0 0 15px rgba(229, 169, 19, 0.15);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-actions-wrapper {
+                width: 100%;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
+            .nav-actions-wrapper {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <header>
+        <div class="logo-container" id="logo_btn">
+            <div class="logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M8 11h8" stroke="var(--accent-amber)" />
+                    <path d="M12 7v8" stroke="var(--accent-amber)" />
+                </svg>
+            </div>
+            <div class="logo-text" data-en="SmartReport" data-ne="स्मार्ट रिपोर्ट">SmartReport</div>
+        </div>
+        <div class="nav-actions-wrapper">
+            <ul class="nav-links">
+                <li><a href="#" id="nav_home" data-en="Home" data-ne="गृह पृष्ठ">Home</a></li>
+                <li><a href="#" id="nav_about" data-en="About" data-ne="हाम्रो बारेमा">About</a></li>
+                <li><a href="#" id="nav_contact" data-en="Contact" data-ne="सम्पर्क">Contact</a></li>
+            </ul>
+            <div class="lang-toggle">
+                <button class="lang-btn" id="btnNepali">नेपाली</button>
+                <button class="lang-btn active" id="btnEnglish">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <span class="tagline" data-en="Civic Infrastructure Desk" data-ne="नागरिक पूर्वाधार डेस्क">Civic Infrastructure Desk</span>
+            <h1 data-en="Location-Based Road Condition Reporting" data-ne="स्थान-आधारित सडक अवस्था रिपोर्टिङ">Location-Based Road Condition Reporting</h1>
+            <p class="hero-desc" data-en="Empowering citizens and municipal departments to report, track, and improve local road conditions and hazards through precise geographical mapping." data-ne="सटीक भौगोलिक नक्साङ्कन मार्फत स्थानीय सडकको अवस्था, खाल्डाखुल्डी र जोखिमहरू रिपोर्ट, ट्र्याक र सुधार गर्न नागरिक र सरकारी निकायलाई सक्षम बनाउँदै।">Empowering citizens and municipal departments to report, track, and improve local road conditions and hazards through precise geographical mapping.</p>
+        </section>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title" id="form_title" data-en="Initialize Session" data-ne="सत्र सुरु गर्नुहोस्">Initialize Session</h2>
+                <p class="card-subtitle" data-en="Register your name to initialize a secure road reporting session" data-ne="सडक रिपोर्टिङ सत्र सुरु गर्न आफ्नो नाम दर्ता गर्नुहोस्">Register your name to initialize a secure road reporting session</p>
+            </div>
+            
+            <form method="post" action="" id="main_reporting_form">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="name_input" data-en="Reporter Full Name" data-ne="रिपोर्टरको पूरा नाम">Reporter Full Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="name" id="name_input" data-en-placeholder="e.g. Ram Bahadur Shrestha" data-ne-placeholder="उदाहरण: राम बहादुर श्रेष्ठ" placeholder="e.g. Ram Bahadur Shrestha" required autocomplete="off">
+                    </div>
+                </div>
+                <button type="submit" id="submit_btn" data-en="Access Reporting Tool" data-ne="रिपोर्टिङ उपकरणमा प्रवेश गर्नुहोस्">Access Reporting Tool</button>
+            </form>
+        </div>
+
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-badge">📍</div>
+                <h3 class="feature-title" data-en="Geotagged Hazards" data-ne="भू-स्थान जोखिमहरू">Geotagged Hazards</h3>
+                <p class="feature-desc" data-en="Pinpoint potholes, damaged roads, and security hazards accurately using real-time geolocation mapping." data-ne="वास्तविक समयको जियोलोकेसन नक्साङ्कन प्रयोग गरी खाल्डाखुल्डी, क्षतिग्रस्त सडक र सुरक्षा खतराहरू सही रूपमा पहिचान गर्नुहोस्।">Pinpoint potholes, damaged roads, and security hazards accurately using real-time geolocation mapping.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-badge">🏛️</div>
+                <h3 class="feature-title" data-en="Government Outreach" data-ne="सरकारी निकायमा पहुँच">Government Outreach</h3>
+                <p class="feature-desc" data-en="Instantly forward verified road condition reports and location coordinates directly to municipal road departments." data-ne="प्रमाणित सडक अवस्था रिपोर्टहरू र स्थान विवरणहरू तुरुन्तै सम्बन्धित नगरपालिका र सडक विभागहरूमा पठाउनुहोस्।">Instantly forward verified road condition reports and location coordinates directly to municipal road departments.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-badge">📊</div>
+                <h3 class="feature-title" data-en="Maintenance Tracker" data-ne="मर्मत सम्भार ट्र्याकर">Maintenance Tracker</h3>
+                <p class="feature-desc" data-en="Monitor the maintenance lifecycle of reported roads, from initial inspection to final repair and paving." data-ne="सडकको प्रारम्भिक निरीक्षणदेखि मर्मत सम्भार र पीच गर्ने अन्तिम चरणसम्मको प्रगति ट्र्याक गर्नुहोस्।">Monitor the maintenance lifecycle of reported roads, from initial inspection to final repair and paving.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p data-en="&copy; 2026 SmartReport Platform. Developed in coordination with municipal infrastructure departments." data-ne="&copy; २०२६ स्मार्ट रिपोर्ट प्लेटफर्म। स्थानीय तह र भौतिक पूर्वाधार शाखाको समन्वयमा विकास गरिएको।">&copy; 2026 SmartReport Platform. Developed in coordination with municipal infrastructure departments.</p>
+    </footer>
+
+    <script>
+        function setLanguage(lang) {
+            const isEnglish = lang === 'en';
+            
+            const btnNepali = document.getElementById('btnNepali');
+            const btnEnglish = document.getElementById('btnEnglish');
+            if (btnNepali) btnNepali.classList.toggle('active', !isEnglish);
+            if (btnEnglish) btnEnglish.classList.toggle('active', isEnglish);
+            
+            document.body.classList.toggle('nepali-font', !isEnglish);
+            
+            // Update document title dynamically
+            document.title = isEnglish ? "Smart Report | Road Location Tracking & Reporting" : "स्मार्ट रिपोर्ट | सडक सुरक्षा तथा दुर्घटना रिपोर्टिङ";
+            
+            // Translate all elements having both data-en and data-ne attributes
+            document.querySelectorAll('[data-en][data-ne]').forEach(el => {
+                el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-ne');
+            });
+            
+            // Translate inputs placeholder text
+            document.querySelectorAll('[data-en-placeholder][data-ne-placeholder]').forEach(el => {
+                el.placeholder = isEnglish ? el.getAttribute('data-en-placeholder') : el.getAttribute('data-ne-placeholder');
+            });
+            
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore saved preference or default to 'en'
+            const saved = localStorage.getItem('preferredLanguage') || 'en';
+            setLanguage(saved);
+            
+            // Attach toggle handlers
+            document.getElementById('btnNepali').addEventListener('click', () => setLanguage('ne'));
+            document.getElementById('btnEnglish').addEventListener('click', () => setLanguage('en'));
+        });
+    </script>
+</body>
+</html>
+```
