@@ -481,14 +481,14 @@
 
                             const errorField = document.getElementById(elementId);
                             const errorText = document.getElementById(elementId + 'Error');
-                            
+
                             if (errorField && errorText) {
                                 errorField.classList.add('is-invalid');
                                 errorText.innerText = Array.isArray(data[key]) ? data[key].join(' ') : data[key];
                             } else {
                                 const globalErr = document.getElementById('globalError');
                                 globalErr.style.display = 'block';
-                                
+
                                 // Format the error value nicely instead of raw JSON where possible
                                 const val = data[key];
                                 const msg = Array.isArray(val) ? val.join(' ') : (typeof val === 'object' ? JSON.stringify(val) : val);
@@ -500,7 +500,7 @@
             } catch (err) {
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Create Account';
-                
+
                 const globalErr = document.getElementById('globalError');
                 globalErr.style.display = 'block';
                 globalErr.innerText = 'An unexpected connection error occurred. Please try again.';

@@ -27,7 +27,7 @@ pip install django djangorestframework djangorestframework-simplejwt django-cors
 # Create the main project
 django-admin startproject my_project .
 
-# Create the authentication/user management app
+# Create the authentication/user management apps
 python manage.py startapp accounts
 ```
 
