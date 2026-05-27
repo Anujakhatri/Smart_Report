@@ -25,7 +25,7 @@ class CustomUser(AbstractUser):
         """Get all roles for this user."""
         from apps.roles.models import Role
         return Role.objects.filter(
-            userrole__user=self
+            user_roles__user=self
         ).distinct()
 
     def get_permissions(self):
