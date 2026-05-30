@@ -1,6 +1,14 @@
 from django.urls import path
-from .import views
+from .views import ReportCreateView, MyReportView
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', ReportCreateView.as_view(), name='report-create'),
+    path('my/', MyReportView.as_view(), name='my-reports'),
 ]
+
+
+
+
+
+
+

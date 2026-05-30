@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from apps.reports.views import home
 from apps.accounts.views import register_page, login_page, profile_page
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +30,5 @@ urlpatterns = [
     path('api/auth/', include('apps.accounts.urls')),
     path('api/rbac/',include('apps.roles.urls')),
     path('api/reports/',include('apps.reports.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
