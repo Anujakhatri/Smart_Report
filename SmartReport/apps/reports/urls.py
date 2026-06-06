@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.reports.views import ReportCreateView, ReportListView
+# from apps.reports.views import ReportCreateView, ReportListView
 
 urlpatterns = [
 #     path('create/', ReportCreateView.as_view(), name='report-create'),
