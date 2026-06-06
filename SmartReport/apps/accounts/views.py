@@ -1,5 +1,4 @@
-import logging
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -10,25 +9,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer, UserProfileSerializer
 
-logger = logging.getLogger(__name__)
-
-def register_page(request):
-    return render(request, "register.html")
-
-def login_page(request):
-    return render(request, "login.html")
-
-def profile_page(request):
-    return render(request, "profile.html")
+User = get_user_model()
 
 
-# Create your views here.
-class RegistrationView(APIView):
-    """
-      POST /api/auth/register/
-      Open to everyone — serializer creates citizen(user) by default and view mint the tokens.
-
-      """
+class RegisterView(APIView):
+    """View to handle user registration and automatically issue tokens on success."""
     permission_classes = [AllowAny]
     throttle_classes = [AnonRateThrottle]
 
@@ -37,40 +22,31 @@ class RegistrationView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        #auto login after registration - return tokens immediately
         refresh = RefreshToken.for_user(user)
-
         return Response({
             "message": "Registration success",
-            "user":{
+            "user": {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
-                "roles": [r.codename for r in user.get_roles()],  # <--not user.role
+                "roles": [r.codename for r in user.get_roles()],
             },
-            "tokens":{
+            "tokens": {
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
-             }
+            }
         }, status=status.HTTP_201_CREATED)
 
-#================= Login =================================
+
 class LoginView(TokenObtainPairView):
-    """
-       POST /api/auth/login/
-       Returns access + refresh token + roles --> frontend redirects based on role
-       No profile call needed after this view
-       """
+    """View to handle login and issue tokens with embedded roles/permissions."""
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
     throttle_classes = [AnonRateThrottle]
 
-#================= Logout =================================
-class LogoutView(generics.GenericAPIView):
-    """
-      POST /api/auth/logout/
-      Blacklists the refresh token — kills the session
-      """
+
+class LogoutView(APIView):
+    """View to handle logout by blacklisting the refresh token."""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -79,15 +55,9 @@ class LogoutView(generics.GenericAPIView):
         serializer.save()
         return Response({"message": "Logout success"}, status=status.HTTP_200_OK)
 
-#================= Profile =================================
-class ProfileAPIView(generics.RetrieveUpdateAPIView):
-    """
-    GET /api/auth/profile/ - Retrieve user profile details
-    PUT /api/auth/profile/ - Update user profile details
-    NOT used for role-based redirect - login response handles first
-    """
+
+class UserProfileView(generics.RetrieveAPIView):
+    """View to retrieve a user profile by pk."""
+    queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user

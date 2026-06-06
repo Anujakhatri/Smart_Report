@@ -2,8 +2,8 @@
 Single source of truth for ALL permission codenames.
 Import from here everywhere. Never type raw strings in views.
 
-Rule: if you find yourself typing 'report.submit' in a view,
-you are doing it wrong. Import ReportPermissions.SUBMIT instead.
+Rule: in views typing 'report.submit' in a view then the wrong way of doing,
+instead do Import ReportPermissions.SUBMIT instead.
 """
 
 class ReportPermissions():
@@ -16,13 +16,13 @@ class ReportPermissions():
     DELETE = 'report.delete'
     CLOSE = 'report.close'
     CHANGE_PRIORITY = 'report.change_priority'
-    MERGE_CLUSTER = 'report.merge_cluster'     #dublicate detect
+    MERGE_CLUSTER = 'report.merge_cluster'     #duplicate detect
 
 class UserPermissions():
     VIEW_ALL = 'report.view_all'
     PROMOTE_STAFF = 'report.promote_to_staff'
     DEACTIVATE = 'report.deactivate'
-    VERIFY = 'report.verify'
+    VERIFY_STAFF = 'report.verify'
 
 class DashboardPermissions():
     VIEW_PROVINCE = 'report.view_province'
@@ -62,34 +62,6 @@ ALL_PERMISSIONS = [
     (RegionPermissions.MANAGE,          'region',    'Add or update region data'),
 ]
 
-
-# ── Master permission list ─────────────────────────────────
-# (codename, resource, description)
-ALL_PERMISSIONS = [
-    # Reports
-    (ReportPermissions.SUBMIT,          'report',    'Submit a new road issue report'),
-    (ReportPermissions.VIEW_OWN,        'report',    'View own submitted reports'),
-    (ReportPermissions.VIEW_PROVINCE,   'report',    'View all reports in assigned province'),
-    (ReportPermissions.VIEW_ALL,        'report',    'View all reports across Nepal'),
-    (ReportPermissions.REVIEW,          'report',    'Review and update report status'),
-    (ReportPermissions.ESCALATE,        'report',    'Escalate report to national level'),
-    (ReportPermissions.DELETE,          'report',    'Delete a report'),
-    (ReportPermissions.CLOSE,           'report',    'Mark report as resolved'),
-    (ReportPermissions.CHANGE_PRIORITY, 'report',    'Override auto-calculated priority score'),
-    (ReportPermissions.MERGE_CLUSTER,   'report',    'Merge duplicate reports into one cluster'),
-    # Users
-    (UserPermissions.VIEW_ALL,          'user',      'View all registered users'),
-    (UserPermissions.PROMOTE_STAFF,     'user',      'Promote citizen to province staff'),
-    (UserPermissions.DEACTIVATE,        'user',      'Deactivate a user account'),
-    (UserPermissions.VERIFY_STAFF,      'user',      'Verify staff identity and credentials'),
-    # Dashboard
-    (DashboardPermissions.VIEW_PROVINCE,'dashboard', 'View province-level statistics'),
-    (DashboardPermissions.VIEW_NATIONAL,'dashboard', 'View national statistics'),
-    (DashboardPermissions.EXPORT_DATA,  'dashboard', 'Export report data as CSV/PDF'),
-    # Regions
-    (RegionPermissions.VIEW,            'region',    'View province and district data'),
-    (RegionPermissions.MANAGE,          'region',    'Add or update region data'),
-]
 
 # ── Role → Permission mapping ──────────────────────────────
 # Change permissions here and re-seed — zero code change needed.
