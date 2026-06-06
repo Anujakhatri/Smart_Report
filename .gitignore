@@ -1,4 +1,22 @@
+# IDE
+.idea/
+*.iml
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+
+# Virtual environment
 venv/
+env/
 .env
-__pycache__
-.idea
+
+# Django
+*.sqlite3
+db.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
