@@ -33,15 +33,6 @@ except ImportError:
 
 User = get_user_model()
 
-    def perform_create(self,serializer):
-        serializer.save(reporter=self.request.user)
-
-class MyReportView(generics.ListAPIView):
-    serializer_class = ReportListSerializer
-    permission_classes =[IsAuthenticated]
-
-    def get_queryset(self):
-        return Report.objects.filter(reporter=self.request.user)
 
 class BaseResponseMixin:
     """Mixin to format standard responses consistently."""
