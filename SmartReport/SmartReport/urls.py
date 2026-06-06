@@ -6,6 +6,7 @@ urlpatterns = [
     path('api/auth/', include('apps.accounts.urls')),
     path('api/rbac/',include('apps.roles.urls')),
     path('api/reports/',include('apps.reports.urls')),
+    path('api/regions/',include('apps.regions.urls')),
 ]
 
 

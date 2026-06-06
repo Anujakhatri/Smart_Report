@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +30,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+FIXTURE_DIRS = [
+    BASE_DIR / 'samples',
+]
 
 # Application definition
 
@@ -49,7 +55,7 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.roles',
     'apps.reports',
-    
+    'apps.regions',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -97,7 +103,7 @@ ROOT_URLCONF = 'SmartReport.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,6 +120,9 @@ WSGI_APPLICATION = 'SmartReport.wsgi.application'
 
 
 #Logging for audit trail
+
+os.makedirs(BASE_DIR / 'logs', exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -121,7 +130,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'logs/rbac_audit.log',
+            'filename': str(BASE_DIR / 'logs' / 'rbac_audit.log'),
         },
     },
     'loggers': {
