@@ -8,6 +8,6 @@ router.register(r'report-clusters', ReportClusterViewSet, basename='report-clust
 
 # TODO: In the future, we could introduce swagger/redoc documentation routes here
 urlpatterns = [
-    path('reports/map-markers/', MapMarkerView.as_view(), name='map-markers'),
+    path('map-markers/', MapMarkerView.as_view(), name='map-markers'),
     path('', include(router.urls)),
 ]

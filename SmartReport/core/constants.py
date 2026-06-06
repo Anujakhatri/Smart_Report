@@ -22,7 +22,7 @@ class UserPermissions():
     VIEW_ALL = 'report.view_all'
     PROMOTE_STAFF = 'report.promote_to_staff'
     DEACTIVATE = 'report.deactivate'
-    VERIFY = 'report.verify'
+    VERIFY_STAFF = 'report.verify'
 
 class DashboardPermissions():
     VIEW_PROVINCE = 'report.view_province'
