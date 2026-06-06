@@ -17,6 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/SmartReport" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SmartReport/apps" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/SmartReport/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.14 (Smart_Report)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
