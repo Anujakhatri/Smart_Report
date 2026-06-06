@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Report - Sign In">
+    <title>Smart Report | Sign In</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc; /* Clean Light Slate Gray */
+            --card-bg: #ffffff; /* Pure White */
+            --card-border: #e2e8f0; /* Soft Gray Border */
+            --text-primary: #1e293b; /* Dark Slate Gray */
+            --text-secondary: #64748b; /* Muted Slate Gray */
+            --primary-dark: #002D72; /* Nepal Royal Blue */
+            --primary-accent: #003893; /* Nepal Flag Blue */
+            --secondary-accent: #d52027; /* Nepal Flag Crimson */
+            --accent-amber: #e5a913; /* Nepal Government Gold */
+            --gradient-primary: linear-gradient(135deg, #003893 0%, #0050b3 50%, #d52027 100%);
+            --font-heading: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+            --font-body: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .bg-glow-1 {
+            position: absolute;
+            top: -200px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 56, 147, 0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(213, 32, 39, 0.04) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        header {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            z-index: 10;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 56, 147, 0.2);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            z-index: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+        }
+
+        .card:hover {
+            border-color: rgba(0, 56, 147, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 56, 147, 0.08);
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+            text-align: center;
+            background: transparent;
+            border-bottom: none;
+            padding: 0;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-control {
+            width: 100%;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+            outline: none;
+        }
+
+        .form-control:focus {
+            background: #ffffff;
+            border-color: var(--secondary-accent);
+            box-shadow: 0 0 12px rgba(213, 32, 39, 0.15);
+            color: var(--text-primary);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--secondary-accent) 0%, #b51a20 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-heading);
+            letter-spacing: 0.02em;
+            box-shadow: 0 8px 20px rgba(213, 32, 39, 0.2);
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(213, 32, 39, 0.35);
+            filter: brightness(1.15);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .text-link {
+            color: var(--secondary-accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+
+        .text-link:hover {
+            color: var(--primary-accent);
+            text-decoration: underline;
+        }
+
+        .error-alert {
+            background-color: rgba(213, 32, 39, 0.05);
+            border: 1px solid rgba(213, 32, 39, 0.2);
+            color: var(--secondary-accent);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+            animation: shake 0.4s ease;
+            text-align: left;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        footer {
+            padding: 2.2rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            background: #ffffff;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <header>
+        <a href="/" class="logo-container">
+            <div class="logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M8 11h8" stroke="var(--accent-amber)" />
+                    <path d="M12 7v8" stroke="var(--accent-amber)" />
+                </svg>
+            </div>
+            <div class="logo-text">SmartReport</div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/register/" class="text-link">Register</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Sign In</h2>
+                <p class="card-subtitle">Access your secure civic profile to submit reports</p>
+            </div>
+
+            <!-- Error Notification -->
+            <div class="error-alert" id="errorAlert"></div>
+
+            <form id="loginForm">
+                {% csrf_token %}
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-submit w-100" id="submitBtn">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted mb-0" style="font-size: 0.9rem;">
+                    Don't have an account? <a href="/register/" class="text-link">Register Here</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SmartReport Platform. Developed in coordination with municipal infrastructure departments.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        if (localStorage.getItem('accessToken')) {
+            window.location.href = '/profile/';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const errorAlert = document.getElementById('errorAlert');
+            errorAlert.style.display = 'none';
+
+            const usernameVal = document.getElementById('username').value.trim();
+            const passwordVal = document.getElementById('password').value;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Signing In...';
+
+            try {
+                const response = await fetch('/api/auth/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        username: usernameVal,
+                        password: passwordVal
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('accessToken', data.access);
+                    localStorage.setItem('refreshToken', data.refresh);
+                    localStorage.setItem('username', data.username);
+                    localStorage.setItem('role', data.role);
+                    localStorage.setItem('email', data.email);
+                    localStorage.setItem('userId', data.user_id);
+
+                    submitBtn.innerText = 'Redirecting...';
+                    window.location.href = '/profile/';
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Sign In';
+
+                    errorAlert.style.display = 'block';
+                    errorAlert.style.animation = 'none';
+                    errorAlert.offsetHeight; // trigger reflow
+                    errorAlert.style.animation = null;
+
+                    if (data.detail) {
+                        errorAlert.innerText = data.detail;
+                    } else if (data.non_field_errors) {
+                        errorAlert.innerText = data.non_field_errors.join(' ');
+                    } else {
+                        errorAlert.innerText = 'Invalid username or password.';
+                    }
+                }
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Sign In';
+                errorAlert.style.display = 'block';
+                errorAlert.innerText = 'A network error occurred. Please check your connection.';
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>

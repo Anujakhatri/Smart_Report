@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Report - Secure Profile">
+    <title>Smart Report | Secure Profile</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc; /* Clean Light Slate Gray */
+            --card-bg: #ffffff; /* Pure White */
+            --card-border: #e2e8f0; /* Soft Gray Border */
+            --text-primary: #1e293b; /* Dark Slate Gray */
+            --text-secondary: #64748b; /* Muted Slate Gray */
+            --primary-dark: #002D72; /* Nepal Royal Blue */
+            --primary-accent: #003893; /* Nepal Flag Blue */
+            --secondary-accent: #d52027; /* Nepal Flag Crimson */
+            --accent-amber: #e5a913; /* Nepal Government Gold */
+            --gradient-primary: linear-gradient(135deg, #003893 0%, #0050b3 50%, #d52027 100%);
+            --font-heading: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+            --font-body: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .bg-glow-1 {
+            position: absolute;
+            top: -200px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 56, 147, 0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(213, 32, 39, 0.04) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        header {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            z-index: 10;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 56, 147, 0.2);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            z-index: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+        }
+
+        .card:hover {
+            border-color: rgba(0, 56, 147, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 56, 147, 0.08);
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: transparent;
+            border-bottom: 1px solid var(--card-border);
+            padding: 0 0 1.5rem 0;
+        }
+
+        .avatar-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 56, 147, 0.2);
+            margin: 0 auto 1rem auto;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--primary-dark);
+        }
+
+        .badge-role {
+            display: inline-block;
+            background: rgba(229, 169, 19, 0.08);
+            border: 1px solid rgba(229, 169, 19, 0.25);
+            color: #b47c00;
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-table {
+            background: #f1f5f9;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid #cbd5e1;
+            align-items: center;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-label i {
+            color: var(--primary-accent);
+            font-size: 1rem;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .btn-action {
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 10px 20px;
+            transition: var(--transition-smooth);
+            font-family: var(--font-heading);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, var(--secondary-accent) 0%, #b51a20 100%);
+            box-shadow: 0 4px 12px rgba(213, 32, 39, 0.2);
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(213, 32, 39, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .btn-refresh {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-refresh i {
+            color: var(--primary-accent);
+        }
+
+        .btn-refresh:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            color: var(--text-primary);
+        }
+
+        /* Loading Spinner Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.4s ease;
+        }
+
+        .spinner-custom {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 56, 147, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            padding: 2.2rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            background: #ffffff;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <header>
+        <a href="/" class="logo-container">
+            <div class="logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M8 11h8" stroke="var(--accent-amber)" />
+                    <path d="M12 7v8" stroke="var(--accent-amber)" />
+                </svg>
+            </div>
+            <div class="logo-text">SmartReport</div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="#" class="text-link" id="nav_signout" onclick="handleLogout()">Sign Out</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="card position-relative">
+            <!-- Loading Indicator -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner-custom"></div>
+                <h6 class="text-muted">Loading secure profile data...</h6>
+            </div>
+
+            <!-- Profile Header -->
+            <div class="card-header">
+                <div class="avatar-circle" id="avatarLetter">U</div>
+                <h2 class="card-title" id="profileUsername">User Profile</h2>
+                <div class="badge-role" id="profileRole">Citizen</div>
+            </div>
+
+            <!-- Profile Details -->
+            <div class="info-table">
+                <!-- User ID -->
+                <div class="info-row">
+                    <span class="info-label"><i class="bi bi-hash"></i> User ID</span>
+                    <span class="info-value text-muted" id="infoId">---</span>
+                </div>
+                <!-- Email -->
+                <div class="info-row">
+                    <span class="info-label"><i class="bi bi-envelope"></i> Email</span>
+                    <span class="info-value" id="infoEmail">---</span>
+                </div>
+                <!-- Phone -->
+                <div class="info-row">
+                    <span class="info-label"><i class="bi bi-telephone"></i> Phone Number</span>
+                    <span class="info-value" id="infoPhone">---</span>
+                </div>
+                <!-- Province -->
+                <div class="info-row" id="provinceRow" style="display: none;">
+                    <span class="info-label"><i class="bi bi-geo-alt"></i> Province</span>
+                    <span class="info-value text-capitalize" id="infoProvince">---</span>
+                </div>
+            </div>
+
+            <!-- Footer Controls -->
+            <div class="d-flex justify-content-end gap-2">
+                <button class="btn-action btn-refresh" onclick="fetchProfileData(true)"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                <button class="btn-action btn-logout" id="logoutBtn" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SmartReport Platform. Developed in coordination with municipal infrastructure departments.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        if (!accessToken || !refreshToken) {
+            localStorage.clear();
+            window.location.href = '/login/';
+        }
+
+        async function fetchProfileData(isManual = false) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (isManual) {
+                overlay.style.display = 'flex';
+                overlay.style.opacity = '1';
+            }
+
+            let token = localStorage.getItem('accessToken');
+
+            try {
+                const response = await fetch('/api/auth/profile/', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    renderProfile(data);
+                } else if (response.status === 401) {
+                    console.log("Access token expired, attempting to renew token...");
+                    const refreshed = await attemptTokenRefresh();
+                    if (refreshed) {
+                        await fetchProfileData();
+                    } else {
+                        triggerForcedLogout();
+                    }
+                } else {
+                    console.error("Failed to load profile details:", response.statusText);
+                    triggerForcedLogout();
+                }
+            } catch (err) {
+                console.error("Connection error loading profile:", err);
+                overlay.style.display = 'none';
+            }
+        }
+
+        async function attemptTokenRefresh() {
+            const refresh = localStorage.getItem('refreshToken');
+            if (!refresh) return false;
+
+            try {
+                const response = await fetch('/api/auth/token/refresh/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ refresh: refresh })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('accessToken', data.access);
+                    if (data.refresh) {
+                        localStorage.setItem('refreshToken', data.refresh);
+                    }
+                    console.log("Tokens renewed successfully.");
+                    return true;
+                }
+            } catch (err) {
+                console.error("Error refreshing token:", err);
+            }
+            return false;
+        }
+
+        function renderProfile(user) {
+            document.getElementById('profileUsername').innerText = user.username;
+            document.getElementById('avatarLetter').innerText = user.username.charAt(0).toUpperCase();
+            document.getElementById('profileRole').innerText = user.role;
+            
+            document.getElementById('infoId').innerText = user.id;
+            document.getElementById('infoEmail').innerText = user.email || 'N/A';
+            document.getElementById('infoPhone').innerText = user.phone_number || 'Not provided';
+
+            if (user.province) {
+                document.getElementById('provinceRow').style.display = 'flex';
+                document.getElementById('infoProvince').innerText = user.province;
+            } else {
+                document.getElementById('provinceRow').style.display = 'none';
+            }
+
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 400);
+        }
+
+        async function handleLogout() {
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.disabled = true;
+            logoutBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing Out...';
+
+            const refresh = localStorage.getItem('refreshToken');
+            const access = localStorage.getItem('accessToken');
+
+            try {
+                await fetch('/api/auth/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${access}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ refresh: refresh })
+                });
+            } catch (err) {
+                console.error("Server logout error:", err);
+            } finally {
+                triggerForcedLogout();
+            }
+        }
+
+        function triggerForcedLogout() {
+            localStorage.clear();
+            window.location.href = '/login/';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => fetchProfileData());
+    </script>
+</body>
+</html>
