@@ -1,3 +1,4 @@
+from django.db import models # NEW
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -23,6 +24,7 @@ from apps.reports.serializers import (
 )
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.reports.filters import ReportFilter
+from apps.roles.permissions import IsCitizen, IsFieldOfficer, IsRegionAdmin, IsSuperAdmin # NEW
 
 try:
     from core.pagination import CustomPagination
@@ -58,6 +60,17 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = ReportFilter
 
+    def get_permissions(self): # NEW
+        if self.action == 'create': # NEW
+            permission_classes = [IsCitizen | IsFieldOfficer | IsRegionAdmin | IsSuperAdmin] # NEW
+        elif self.action in ['update', 'partial_update', 'assign', 'resolve', 'approve', 'reject']: # NEW
+            permission_classes = [IsFieldOfficer | IsRegionAdmin | IsSuperAdmin] # NEW
+        elif self.action == 'destroy': # NEW
+            permission_classes = [IsSuperAdmin] # NEW
+        else: # NEW
+            permission_classes = [IsCitizen | IsFieldOfficer | IsRegionAdmin | IsSuperAdmin] # NEW
+        return [permission() for permission in permission_classes] # NEW
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ReportListSerializer
@@ -69,28 +82,22 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
             return ReportUpdateSerializer
         return ReportDetailSerializer
 
-    def get_queryset(self):
-        user = self.request.user
-        if not user.is_authenticated:
-            return Report.objects.none()
+    def get_queryset(self): # CHANGED
+        user = self.request.user # CHANGED
+        if not user.is_authenticated: # CHANGED
+            return Report.objects.none() # CHANGED
 
-        # Check if user has permission to view all reports across Nepal
-        has_view_all, _ = RBACService.has_permission(user, ReportPermissions.VIEW_ALL)
-        if has_view_all:
-            return Report.objects.all()
-
-        # Check if user has permission to view province reports
-        has_view_province, _ = RBACService.has_permission(user, ReportPermissions.VIEW_PROVINCE)
-        if has_view_province:
-            user_scopes = UserRole.objects.filter(user=user).values_list('scope', flat=True)
-            district_ids = []
-            for scope in user_scopes:
-                if scope.startswith('region_'):
-                    district_ids.append(scope.replace('region_', ''))
-            return Report.objects.filter(region_id__in=district_ids)
-
-        # Citizens / standard users can only view their own
-        return Report.objects.filter(submitted_by=user)
+        if user.is_superuser or UserRole.objects.filter(user=user, role__codename='super_admin').exists(): # NEW
+            return Report.objects.all() # NEW
+            
+        user_roles = UserRole.objects.filter(user=user) # NEW
+        q_objects = models.Q(submitted_by=user) # NEW
+        
+        if user_roles.filter(role__codename__in=['region_admin', 'field_officer']).exists(): # NEW
+            allowed_regions = user_roles.values_list('region', flat=True) # NEW
+            q_objects |= models.Q(region_id__in=allowed_regions) # NEW
+            
+        return Report.objects.filter(q_objects) # NEW
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -103,13 +110,11 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return self.get_success_response(serializer.data, "List retrieved successfully")
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        # Enforce RBAC dynamic check
-        if not RBACService.can_view_report(request.user, instance):
-            return self.get_error_response("Access Denied to this report details.", status.HTTP_403_FORBIDDEN)
-        serializer = self.get_serializer(instance)
-        return self.get_success_response(serializer.data, "Details retrieved successfully")
+    def retrieve(self, request, *args, **kwargs): # CHANGED
+        instance = self.get_object() # CHANGED
+        self.check_object_permissions(request, instance) # CHANGED
+        serializer = self.get_serializer(instance) # CHANGED
+        return self.get_success_response(serializer.data, "Details retrieved successfully") # CHANGED
 
     @method_decorator(require_permission(ReportPermissions.SUBMIT))
     def create(self, request, *args, **kwargs):

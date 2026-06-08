@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.accounts.models import CustomUser
+from apps.regions.models import District # NEW
 
 
 class Permission(models.Model):
@@ -41,13 +42,14 @@ class UserRole(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_roles')
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='user_roles')
     scope = models.CharField(max_length=50, blank=True)   #optional scope : 'team_engineering', 'region_123' etc
+    region = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_roles') # NEW
 
     assigned_at = models.DateTimeField(auto_now_add=True)
     assigned_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='user_roles_assigned')
 
     class Meta:
         db_table = 'roles_user_role'
-        unique_together = (('user', 'role', 'scope'),)
+        unique_together = (('user', 'role', 'region'),) # CHANGED
 
     def __str__(self):
         return f"{self.user.username}"

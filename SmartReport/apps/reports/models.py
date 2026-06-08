@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 from apps.regions.models import District
 
-# TODO: Add transition validators if using FSM library in the future
+
 STATUS_TRANSITIONS = {
     'draft': ['submitted'],
     'submitted': ['under_review', 'rejected'],
