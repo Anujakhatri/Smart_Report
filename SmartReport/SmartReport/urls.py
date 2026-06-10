@@ -13,5 +13,5 @@ urlpatterns = [
     path('citizen/auth/login/', CitizenLoginView.as_view(), name='citizen_login'),
     path('ward/auth/login/', WardLoginView.as_view(), name='ward_login'),
     path('district/auth/login/', DistrictLoginView.as_view(), name='district_login'),
-    path('admin-portal/auth/login/', AdminLoginView.as_view(), name='admin_login'),
+    path('admin/auth/login/', AdminLoginView.as_view(), name='admin_login'),
 ]

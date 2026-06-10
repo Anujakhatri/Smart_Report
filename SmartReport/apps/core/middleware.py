@@ -11,7 +11,7 @@ class PortalAccessMiddleware:
             '/citizen/':      ROLE_PORTAL_MAP['citizen'],
             '/ward/':         ROLE_PORTAL_MAP['ward_staff'],
             '/district/':     ROLE_PORTAL_MAP['district_admin'],
-            '/admin-portal/': ROLE_PORTAL_MAP['national_admin'],
+            '/admin/':        ROLE_PORTAL_MAP['national_admin'],
         }
 
     def __call__(self, request):
