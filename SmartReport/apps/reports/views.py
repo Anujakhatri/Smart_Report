@@ -25,12 +25,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from apps.reports.filters import ReportFilter
 from apps.reports.permissions import IsCitizen, IsWardStaff, IsDistrictAdmin, IsNationalAdmin
 
-try:
-    from core.pagination import CustomPagination
-except ImportError:
-    from rest_framework.pagination import PageNumberPagination
-    class CustomPagination(PageNumberPagination):
-        page_size = 10
+from apps.core.pagination import CustomPagination
 
 User = get_user_model()
 

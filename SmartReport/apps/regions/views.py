@@ -5,12 +5,7 @@ from rest_framework.permissions import AllowAny
 from apps.regions.models import Province, District
 from apps.regions.serializers import ProvinceSerializer, ProvinceDetailSerializer, DistrictSerializer
 
-try:
-    from core.pagination import CustomPagination
-except ImportError:
-    from rest_framework.pagination import PageNumberPagination
-    class CustomPagination(PageNumberPagination):
-        page_size = 10
+from apps.core.pagination import CustomPagination
 
 
 class BaseResponseMixin:
