@@ -25,6 +25,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data.pop('password2')
         return User.objects.create_user(**validated_data)
 
+from SmartReport.constants import ROLE_PORTAL_MAP
 
 class LoginSerializer(TokenObtainPairSerializer):
     """Custom token serializer that embeds roles and permissions."""
@@ -34,8 +35,20 @@ class LoginSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['username'] = user.username
         token['email'] = user.email
-        token['roles'] = [r.codename for r in user.get_roles()]
+        
+        roles = [r.codename for r in user.get_roles()]
+        token['roles'] = roles
         token['permissions'] = [p.codename for p in user.get_permissions()]
+        
+        # Add portal claim
+        portal = None
+        for role in roles:
+            if role in ROLE_PORTAL_MAP:
+                portal = ROLE_PORTAL_MAP[role]
+                break
+        if portal:
+            token['portal'] = portal
+            
         return token
 
     def validate(self, attrs):
@@ -43,14 +56,22 @@ class LoginSerializer(TokenObtainPairSerializer):
         roles = [r.codename for r in self.user.get_roles()]
         permissions = [p.codename for p in self.user.get_permissions()]
         
+        portal = None
+        for role in roles:
+            if role in ROLE_PORTAL_MAP:
+                portal = ROLE_PORTAL_MAP[role]
+                break
+                
         data['roles'] = roles
         data['permissions'] = permissions
+        data['portal'] = portal
         data['user'] = {
             'id': self.user.id,
             'username': self.user.username,
             'email': self.user.email,
             'roles': roles,
             'permissions': permissions,
+            'portal': portal,
         }
         return data
 

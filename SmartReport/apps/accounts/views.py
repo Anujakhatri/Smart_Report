@@ -38,11 +38,30 @@ class RegisterView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 
-class LoginView(TokenObtainPairView):
-    """View to handle login and issue tokens with embedded roles/permissions."""
+class BasePortalLoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
     throttle_classes = [AnonRateThrottle]
+    
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            portal = response.data.get('portal')
+            if portal != getattr(self, 'required_portal', None):
+                return Response({"detail": "Access denied for this portal."}, status=status.HTTP_403_FORBIDDEN)
+        return response
+
+class CitizenLoginView(BasePortalLoginView):
+    required_portal = 'citizen'
+
+class WardLoginView(BasePortalLoginView):
+    required_portal = 'ward'
+
+class DistrictLoginView(BasePortalLoginView):
+    required_portal = 'district'
+
+class AdminLoginView(BasePortalLoginView):
+    required_portal = 'admin'
 
 
 class LogoutView(APIView):
