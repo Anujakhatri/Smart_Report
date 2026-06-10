@@ -96,6 +96,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  #need for rquest.user
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.core.middleware.PortalAccessMiddleware',   #custom middleware for portal access
 ]
 
 ROOT_URLCONF = 'SmartReport.urls'

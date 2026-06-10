@@ -20,6 +20,7 @@ class CustomUser(AbstractUser):
     province = models.CharField( max_length=50, choices=PROVINCE_CHOICES, blank=True, null=True, help_text="Only applicable for citizen and province staff.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
 
     def get_roles(self):
         """Get all roles for this user."""
@@ -28,6 +29,7 @@ class CustomUser(AbstractUser):
             user_roles__user=self
         ).distinct()
 
+   
     def get_permissions(self):
         """get all distinct permissions for this user."""
         from apps.roles.services import RBACService

@@ -54,6 +54,12 @@ class UserRole(models.Model):
     def __str__(self):
         return f"{self.user.username}"
 
+    def save(self, *args, **kwargs):
+        from django.core.exceptions import ValidationError
+        if getattr(self.role, 'codename', None) == 'ward_staff' and not self.region:
+            raise ValidationError("ward_staff role must have a region assigned.")
+        super().save(*args, **kwargs)
+
 class AuditLog(models.Model):
     DECISION_CHOICES = (
     ('ALLOW', 'Access granted'),

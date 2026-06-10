@@ -14,7 +14,7 @@ from apps.roles.serializers import (
     AuditLogSerializer,
 )
 from apps.roles.services import RBACService
-from apps.roles.permissions import HasPermission, IsAdmin, CanCreateReport, IsReportOwnerOrReadOnly
+from apps.roles.permissions import HasPermission, IsAdmin
 
 User = get_user_model()
 
@@ -160,5 +160,4 @@ class RBACStatsView(APIView):
         })
 
 
-class ReportViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, CanCreateReport, IsReportOwnerOrReadOnly]
+
