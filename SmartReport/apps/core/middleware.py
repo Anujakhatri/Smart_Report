@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from SmartReport.constants import ROLE_PORTAL_MAP
+from apps.core.constants import ROLE_PORTAL_MAP
 
 class PortalAccessMiddleware:
     def __init__(self, get_response):

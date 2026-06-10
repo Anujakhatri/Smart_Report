@@ -7,7 +7,7 @@ if __name__ == "__main__":
     django.setup()
 
 from apps.roles.models import Role, Permission
-from SmartReport.constants import ALL_PERMISSIONS, ROLE_PERMISSION_MAP
+from apps.core.constants import ALL_PERMISSIONS, ROLE_PERMISSION_MAP
 
 def seed_roles_and_permissions():
     print("Seeding permissions...")

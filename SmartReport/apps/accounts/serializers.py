@@ -25,7 +25,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data.pop('password2')
         return User.objects.create_user(**validated_data)
 
-from SmartReport.constants import ROLE_PORTAL_MAP
+from apps.core.constants import ROLE_PORTAL_MAP
 
 class LoginSerializer(TokenObtainPairSerializer):
     """Custom token serializer that embeds roles and permissions."""

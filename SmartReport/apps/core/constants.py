@@ -12,6 +12,8 @@ class ReportPermissions:
     ASSIGN = 'report.assign'
     DELETE = 'report.delete'
     VERIFY_RESOLVED = 'report.verify_resolved'
+    CHANGE_PRIORITY = 'report.change_priority'
+    MERGE_CLUSTER = 'report.merge_cluster'
 
 class UserPermissions:
     MANAGE_REGION = 'user.manage_region'
@@ -31,6 +33,8 @@ ALL_PERMISSIONS = [
     (ReportPermissions.ASSIGN,          'report', 'Assign report to staff'),
     (ReportPermissions.DELETE,          'report', 'Delete a report'),
     (ReportPermissions.VERIFY_RESOLVED, 'report', 'Verify a report is resolved'),
+    (ReportPermissions.CHANGE_PRIORITY, 'report', 'Override auto-calculated priority score'),
+    (ReportPermissions.MERGE_CLUSTER,   'report', 'Merge duplicate reports into one cluster'),
     (UserPermissions.MANAGE_REGION,     'user',   'Manage users in region'),
     (UserPermissions.MANAGE_ALL,        'user',   'Manage all users'),
     (RegionPermissions.MANAGE,          'region', 'Manage regions'),
@@ -65,6 +69,8 @@ ROLE_PERMISSION_MAP = {
         ReportPermissions.UPDATE_STATUS,
         ReportPermissions.ASSIGN,
         ReportPermissions.VERIFY_RESOLVED,
+        ReportPermissions.CHANGE_PRIORITY,
+        ReportPermissions.MERGE_CLUSTER,
         UserPermissions.MANAGE_REGION,
     ],
     'national_admin': [

@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import ValidationError
 
-from SmartReport.constants import ReportPermissions
+from apps.core.constants import ReportPermissions
 from apps.roles.decorators import require_permission
 from apps.roles.services import RBACService
 from apps.roles.models import AuditLog, UserRole
@@ -156,11 +156,11 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
         detail_serializer = ReportDetailSerializer(report)
         return self.get_success_response(detail_serializer.data, "Report created successfully", status.HTTP_201_CREATED)
 
-    @method_decorator(require_permission(ReportPermissions.REVIEW))
+    @method_decorator(require_permission(ReportPermissions.UPDATE_STATUS))
     def update(self, request, *args, **kwargs):
         return self._perform_update(request, *args, **kwargs)
 
-    @method_decorator(require_permission(ReportPermissions.REVIEW))
+    @method_decorator(require_permission(ReportPermissions.UPDATE_STATUS))
     def partial_update(self, request, *args, **kwargs):
         return self._perform_update(request, *args, **kwargs)
 
@@ -267,7 +267,7 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
         return self.get_success_response(ReportDetailSerializer(report).data, "Report submitted successfully")
 
     @action(detail=True, methods=['post'])
-    @method_decorator(require_permission(ReportPermissions.REVIEW))
+    @method_decorator(require_permission(ReportPermissions.UPDATE_STATUS))
     def approve(self, request, pk=None):
         report = self.get_object()
         old_status = report.status
@@ -292,7 +292,7 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
         return self.get_success_response(ReportDetailSerializer(report).data, "Report approved successfully")
 
     @action(detail=True, methods=['post'])
-    @method_decorator(require_permission(ReportPermissions.REVIEW))
+    @method_decorator(require_permission(ReportPermissions.UPDATE_STATUS))
     def reject(self, request, pk=None):
         report = self.get_object()
         reason = request.data.get('rejection_reason')
@@ -322,7 +322,7 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
         return self.get_success_response(ReportDetailSerializer(report).data, "Report rejected successfully")
 
     @action(detail=True, methods=['post'])
-    @method_decorator(require_permission(ReportPermissions.REVIEW))
+    @method_decorator(require_permission(ReportPermissions.ASSIGN))
     def assign(self, request, pk=None):
         report = self.get_object()
         user_id = request.data.get('assigned_to')
@@ -349,7 +349,7 @@ class ReportViewSet(BaseResponseMixin, viewsets.ModelViewSet):
         return self.get_success_response(ReportDetailSerializer(report).data, "Report assigned successfully")
 
     @action(detail=True, methods=['post'])
-    @method_decorator(require_permission(ReportPermissions.CLOSE))
+    @method_decorator(require_permission(ReportPermissions.VERIFY_RESOLVED))
     def resolve(self, request, pk=None):
         report = self.get_object()
         old_status = report.status
