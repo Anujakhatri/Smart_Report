@@ -59,7 +59,7 @@ class RBACService:
     def get_user_permissions(user):
         """Get all permissions for a user (flattened)."""
         return Permission.objects.filter(
-            roles__userrole__user=user
+            roles__user_roles__user=user
         ).distinct()
 
     @staticmethod

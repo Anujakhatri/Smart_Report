@@ -42,13 +42,13 @@ class BasePortalLoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
     throttle_classes = [AnonRateThrottle]
-    
+
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
-            portal = response.data.get('portal')
+            portal = response.data.get('user', {}).get('portal')  # ← user भित्र हेर्नु
             if portal != getattr(self, 'required_portal', None):
-                return Response({"detail": "Access denied for this portal."}, status=status.HTTP_403_FORBIDDEN)
+                return Response({"detail": "Access denied for this portal."}, status=403)
         return response
 
 class CitizenLoginView(BasePortalLoginView):

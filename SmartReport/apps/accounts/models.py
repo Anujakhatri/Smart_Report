@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    @property
+
     def get_roles(self):
         """Get all roles for this user."""
         from apps.roles.models import Role
@@ -29,7 +29,7 @@ class CustomUser(AbstractUser):
             user_roles__user=self
         ).distinct()
 
-    @property
+   
     def get_permissions(self):
         """get all distinct permissions for this user."""
         from apps.roles.services import RBACService
